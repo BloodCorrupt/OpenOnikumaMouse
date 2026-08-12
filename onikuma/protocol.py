@@ -151,15 +151,16 @@ LIGHT_MODE_LABELS = {
     6: "Turn Off The Light",
 }
 
-# Static LED color associated with each DPI stage on Instant S203 hardware
+# Static LED color associated with each DPI stage on Onikuma CW935 hardware
 DPI_STAGE_COLORS = [
-    ("Red", "#FF0000"),
-    ("Green", "#00FF00"),
     ("Blue", "#0000FF"),
+    ("Green", "#00FF00"),
     ("Yellow", "#FFFF00"),
     ("Cyan", "#00FFFF"),
-    ("Purple", "#800080"),
+    ("Magenta", "#FF00FF"),
+    ("White", "#FFFFFF"),
 ]
+
 
 
 

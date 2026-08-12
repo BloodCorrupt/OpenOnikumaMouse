@@ -160,7 +160,8 @@ class OnikumaGUI(ctk.CTk):
         self.dpi_widgets = []
         self.active_dpi_var = ctk.IntVar(value=0)
 
-        stage_color_names = ["Red", "Green", "Blue", "Yellow", "Cyan", "Purple"]
+        stage_color_names = ["Blue", "Green", "Yellow", "Cyan", "Magenta", "White"]
+
 
         for i in range(6):
             stage_row = ctk.CTkFrame(dpi_frame, fg_color=COLOR_BG_DARK, corner_radius=8)
@@ -416,9 +417,10 @@ class OnikumaGUI(ctk.CTk):
 
         ctk.CTkLabel(
             static_card,
-            text="On Onikuma CW935 hardware, static solid LED colors (Red, Green, Blue, Yellow, Cyan, Purple) correspond to DPI Stages 1 to 6.\nSelect the active DPI stage on Tab 1 for your preferred static LED color.",
+            text="On Onikuma CW935 hardware, static solid LED colors (Blue, Green, Yellow, Cyan, Magenta, White) correspond to DPI Stages 1 to 6.\nSelect the active DPI stage on Tab 1 for your preferred static LED color.",
             font=ctk.CTkFont(size=11), text_color=COLOR_TEXT_MUTED, justify="left"
         ).pack(anchor="w", padx=15, pady=(0, 10))
+
 
 
 

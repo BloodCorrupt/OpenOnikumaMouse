@@ -20,7 +20,8 @@ Reverse-engineered directly from the vendor's official WebHID application protoc
   - Rebind all 6 physical mouse buttons (Left, Right, Middle, Forward, Back, DPI Cycle) to presets: Media Play/Pause, Volume, Browser Nav, Boss Key, Fire Key, Triple Click, etc.
 - **🌈 RGB Lighting Control & Static Color Mapping**
   - **7 Hardware Light Modes**: Wave, Neon, Touring Flash, YOYO Ball, Unidirectional Flashing, Circular Breathing, Turn Off The Light.
-  - **Static Stage Colors**: Hardware static solid colors (Red, Green, Blue, Yellow, Cyan, Purple) bound directly to active DPI Stages 1 to 6.
+  - **Static Stage Colors**: Hardware static solid colors (Blue, Green, Yellow, Cyan, Magenta, White) bound directly to active DPI Stages 1 to 6.
+
 - **🔋 Vendor-Accurate Battery Meter & Connection Mode**
   - Displays connection interface (**2.4G Wireless Dongle** vs **Wired USB**).
   - **Exact Vendor Lookup Mapping**: Implements the official WebHID battery range lookup table (10% to 100%) with charging indicator (`⚡`).
