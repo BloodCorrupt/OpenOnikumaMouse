@@ -13,6 +13,8 @@ import threading
 import logging
 from typing import Optional, List
 
+from PIL import Image, ImageDraw  # type: ignore
+import pystray  # type: ignore
 import customtkinter as ctk  # type: ignore
 from tkinter import messagebox
 
@@ -46,8 +48,8 @@ class OnikumaGUI(ctk.CTk):
         super().__init__()
 
         self.title("Onikuma CW935 Mouse Control Panel")
-        self.geometry("960 x 720")
-        self.minsize(900, 680)
+        self.geometry("980x700")
+        self.minsize(960, 660)
         self.configure(fg_color=COLOR_BG_DARK)
 
         self.mouse: Optional[OnikumaCW935] = None
@@ -55,13 +57,87 @@ class OnikumaGUI(ctk.CTk):
         self.current_config: Optional[MouseConfig] = None
         self.current_buttons: Optional[List[ButtonAssignment]] = None
         self._polling_active = True
+        self.tray_icon: Optional[pystray.Icon] = None
 
+        self._load_app_icon()
         self._build_ui()
         self._try_connect_mouse()
+        self._init_tray_icon()
+
+        # Intercept Close (X) button to minimize to tray
+        self.protocol("WM_DELETE_WINDOW", self.minimize_to_tray)
 
         # Start background thread for battery & connection updates
         self.poll_thread = threading.Thread(target=self._background_poll_loop, daemon=True)
         self.poll_thread.start()
+
+    def _load_app_icon(self):
+        """Set window icon from assets/icon.ico or assets/icon.png."""
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        project_dir = os.path.dirname(base_dir)
+        
+        ico_path = os.path.join(project_dir, "assets", "icon.ico")
+        png_path = os.path.join(project_dir, "assets", "icon.png")
+
+        try:
+            if os.path.exists(ico_path) and sys.platform.startswith("win"):
+                self.iconbitmap(ico_path)
+            elif os.path.exists(png_path):
+                img = Image.open(png_path)
+                photo = ctk.CTkImage(light_image=img, dark_image=img, size=(32, 32))
+                # For Tkinter titlebar
+                self.iconphoto(True, photo._photo_image)
+        except Exception as e:
+            logger.debug(f"Could not set window icon: {e}")
+
+    def _init_tray_icon(self):
+        """Initialize system tray notification icon using pystray."""
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        project_dir = os.path.dirname(base_dir)
+        png_path = os.path.join(project_dir, "assets", "icon.png")
+
+        if os.path.exists(png_path):
+            tray_img = Image.open(png_path)
+        else:
+            # Fallback icon
+            tray_img = Image.new('RGB', (64, 64), color='#0066FF')
+
+        menu = pystray.Menu(
+            pystray.MenuItem("Show Onikuma CW935", self._show_from_tray, default=True),
+            pystray.MenuItem("Reconnect Mouse", lambda icon, item: self.after(0, self._try_connect_mouse)),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem("Exit", self._exit_from_tray)
+        )
+
+        self.tray_icon = pystray.Icon("OnikumaCW935", tray_img, "Onikuma CW935 Mouse Control Panel", menu)
+        tray_thread = threading.Thread(target=self.tray_icon.run, daemon=True)
+        tray_thread.start()
+
+    def _show_from_tray(self, icon=None, item=None):
+        """Restore window from system tray."""
+        self.after(0, self._restore_window)
+
+    def _restore_window(self):
+        self.deiconify()
+        self.lift()
+        self.focus_force()
+
+    def minimize_to_tray(self):
+        """Minimize application window to Windows system tray."""
+        self.withdraw()
+
+    def _exit_from_tray(self, icon=None, item=None):
+        """Completely close the application from system tray."""
+        if self.tray_icon:
+            self.tray_icon.stop()
+        self.after(0, self._real_quit)
+
+    def _real_quit(self):
+        """Shutdown mouse connection and terminate GUI loop."""
+        self._polling_active = False
+        if self.mouse:
+            self.mouse.disconnect()
+        self.destroy()
 
     def _build_ui(self):
         """Construct all GUI frames, header, tabs, and widgets."""
@@ -131,6 +207,12 @@ class OnikumaGUI(ctk.CTk):
         )
         self.tabview.grid(row=1, column=0, padx=20, pady=(10, 20), sticky="nsew")
 
+        # Fix tab text overlap and slight rendering resize shifts
+        self.tabview._segmented_button.configure(
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            height=36
+        )
+
         self.tab_dpi = self.tabview.add("DPI & Performance")
         self.tab_buttons = self.tabview.add("Button Mapping")
         self.tab_rgb = self.tabview.add("RGB Lighting")
@@ -142,6 +224,7 @@ class OnikumaGUI(ctk.CTk):
         self._build_tab_info()
 
     # ─── TAB 1: DPI & PERFORMANCE ────────────────────────────────────────────────
+
 
     def _build_tab_dpi(self):
         tab = self.tab_dpi

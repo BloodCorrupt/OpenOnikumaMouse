@@ -2,3 +2,6 @@ hidapi
 rich
 customtkinter
 pillow
+pystray
+pyinstaller
+

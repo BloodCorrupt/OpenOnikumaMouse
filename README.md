@@ -25,6 +25,10 @@ Reverse-engineered directly from the vendor's official WebHID application protoc
 - **🔋 Vendor-Accurate Battery Meter & Connection Mode**
   - Displays connection interface (**2.4G Wireless Dongle** vs **Wired USB**).
   - **Exact Vendor Lookup Mapping**: Implements the official WebHID battery range lookup table (10% to 100%) with charging indicator (`⚡`).
+- **📌 Windows System Tray Integration & Executable Build**
+  - Minimizes to system tray on window close (`X`).
+  - Right-click tray menu options (`Show Onikuma CW935`, `Reconnect Mouse`, `Exit`).
+  - Includes `build_exe.py` script to compile into a standalone Windows `.exe` (`dist/OnikumaCW935/OnikumaCW935.exe`).
 
 ---
 
@@ -39,11 +43,23 @@ Reverse-engineered directly from the vendor's official WebHID application protoc
 - **Python 3.8+**
 - **hidapi** (USB HID communication layer)
 - **customtkinter** (Modern dark-theme UI components)
+- **pystray** & **Pillow** (System tray icon support)
 
 Install dependencies via pip:
 ```bash
 pip install -r requirements.txt
 ```
+
+---
+
+## 🛠️ Build Standalone Windows Executable (.exe)
+
+To compile the application into a standalone Windows executable (`.exe` with app icon):
+
+```bash
+python build_exe.py
+```
+The output executable will be generated at `dist/OnikumaCW935/OnikumaCW935.exe`.
 
 ---
 
@@ -60,6 +76,7 @@ For headless environments or command-line scripting:
 ```bash
 python main.py --cli
 ```
+
 
 ---
 
