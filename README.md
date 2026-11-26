@@ -34,6 +34,18 @@ Reverse-engineered directly from the vendor's official WebHID application protoc
 
 ---
 
+## Screenshots
+
+| DPI & Performance | Button Mapping |
+| :---: | :---: |
+| ![DPI & Performance](assets/screenshots/dpi_performance.png) | ![Button Mapping](assets/screenshots/button_mapping.png) |
+
+| RGB Lighting | Device Info & Reset |
+| :---: | :---: |
+| ![RGB Lighting](assets/screenshots/rgb_lighting.png) | ![Device Info & Reset](assets/screenshots/device_info.png) |
+
+---
+
 ## Requirements
 
 - **Python 3.10+**
