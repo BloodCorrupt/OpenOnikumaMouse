@@ -123,7 +123,16 @@ class MousePreviewWidget(QWidget):
 
         self._anim_timer = QTimer(self)
         self._anim_timer.timeout.connect(self._tick_animation)
-        self._anim_timer.start(33)  # ~30 FPS
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        if not self._anim_timer.isActive():
+            self._anim_timer.start(33)  # ~30 FPS only while visible
+
+    def hideEvent(self, event):
+        if self._anim_timer.isActive():
+            self._anim_timer.stop()
+        super().hideEvent(event)
 
     def set_light_mode(self, mode: int):
         self._light_mode = mode

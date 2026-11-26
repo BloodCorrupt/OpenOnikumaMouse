@@ -10,6 +10,7 @@ sleep timer, scroll direction, and battery monitoring.
 import sys
 import os
 import time
+import signal
 import threading
 import logging
 from typing import Optional, List
@@ -150,6 +151,10 @@ class OnikumaMainWindow(QMainWindow):
             return
 
         self._polling_active = False
+        if hasattr(self, "btn_map_preview"):
+            self.btn_map_preview._anim_timer.stop()
+        if hasattr(self, "rgb_preview"):
+            self.rgb_preview._anim_timer.stop()
         if self.mouse:
             try:
                 self.mouse.disconnect()
@@ -158,6 +163,7 @@ class OnikumaMainWindow(QMainWindow):
         if self.tray_icon:
             self.tray_icon.hide()
         event.accept()
+        QApplication.quit()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -1151,6 +1157,13 @@ def main():
     app.setStyleSheet(build_stylesheet())
 
     window = OnikumaMainWindow()
+
+    # Allow Ctrl+C in terminal to exit cleanly without KeyboardInterrupt spam
+    signal.signal(signal.SIGINT, lambda *_args: window._exit_from_tray())
+    sigint_timer = QTimer()
+    sigint_timer.start(200)
+    sigint_timer.timeout.connect(lambda: None)
+
     window.show()
     sys.exit(app.exec())
 
