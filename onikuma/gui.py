@@ -259,10 +259,10 @@ class OnikumaMainWindow(QMainWindow):
         self.nav_group.setExclusive(True)
 
         nav_items = [
-            ("⚡  DPI & Performance", 0),
+            ("⚡  DPI && Performance", 0),
             ("🖱  Button Mapping", 1),
             ("🌈  RGB Lighting", 2),
-            ("⚙  Device Info & Reset", 3),
+            ("⚙  Device Info && Reset", 3),
         ]
 
         for label, page_idx in nav_items:
