@@ -311,6 +311,7 @@ class OnikumaMainWindow(QMainWindow):
         page = QWidget()
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         content = QWidget()
         scroll.setWidget(content)
 
@@ -319,8 +320,8 @@ class OnikumaMainWindow(QMainWindow):
         outer.addWidget(scroll)
 
         main_layout = QGridLayout(content)
-        main_layout.setContentsMargins(24, 22, 24, 22)
-        main_layout.setSpacing(18)
+        main_layout.setContentsMargins(20, 18, 20, 18)
+        main_layout.setSpacing(16)
         main_layout.setColumnStretch(0, 11)
         main_layout.setColumnStretch(1, 9)
 
@@ -328,13 +329,14 @@ class OnikumaMainWindow(QMainWindow):
         dpi_card = QFrame()
         dpi_card.setProperty("card", True)
         dpi_layout = QVBoxLayout(dpi_card)
-        dpi_layout.setContentsMargins(20, 18, 20, 18)
+        dpi_layout.setContentsMargins(18, 16, 18, 16)
         dpi_layout.setSpacing(10)
 
         hdr = QLabel("DPI Stages")
         hdr.setProperty("heading", "section")
         sub = QLabel("Select active stage or drag sliders to tune sensitivity (50 – 12,800 DPI)")
         sub.setProperty("muted", True)
+        sub.setWordWrap(True)
         dpi_layout.addWidget(hdr)
         dpi_layout.addWidget(sub)
         dpi_layout.addSpacing(4)
@@ -418,6 +420,7 @@ class OnikumaMainWindow(QMainWindow):
         perf_hdr.setProperty("heading", "section")
         perf_sub = QLabel("Configure polling rate, lift-off distance, debounce, and sleep behavior")
         perf_sub.setProperty("muted", True)
+        perf_sub.setWordWrap(True)
         perf_layout.addWidget(perf_hdr)
         perf_layout.addWidget(perf_sub)
 
