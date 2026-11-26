@@ -87,19 +87,19 @@ def build_stylesheet() -> str:
 
     /* Cards */
     QFrame[card="true"] {{
-        background-color: {BG_CARD};
+        background-color: transparent;
         border: 1px solid {BORDER_SUBTLE};
         border-radius: 14px;
     }}
 
     QFrame[subCard="true"] {{
-        background-color: {BG_CARD_ELEVATED};
+        background-color: transparent;
         border: 1px solid {BORDER_SUBTLE};
         border-radius: 10px;
     }}
 
     QFrame[subCard="true"][activeStage="true"] {{
-        background-color: rgba(46, 107, 255, 0.12);
+        background-color: rgba(46, 107, 255, 0.08);
         border: 1px solid {ACCENT_PRIMARY};
     }}
 
@@ -187,7 +187,7 @@ def build_stylesheet() -> str:
 
     /* Segmented Pill Toggle Buttons */
     QPushButton[segment="true"] {{
-        background-color: {BG_INPUT};
+        background-color: transparent;
         color: {TEXT_SECONDARY};
         border: 1px solid {BORDER_SUBTLE};
         border-radius: 8px;
@@ -202,9 +202,9 @@ def build_stylesheet() -> str:
     }}
 
     QPushButton[segment="true"]:checked {{
-        background-color: {ACCENT_PRIMARY};
+        background-color: rgba(46, 107, 255, 0.12);
         color: #FFFFFF;
-        border-color: {ACCENT_PRIMARY};
+        border: 1px solid {ACCENT_PRIMARY};
     }}
 
     /* Sliders */
@@ -282,14 +282,17 @@ def build_stylesheet() -> str:
     }}
 
     QRadioButton::indicator {{
-        width: 16px;
-        height: 16px;
-        border-radius: 9px;
+        width: 14px;
+        height: 14px;
+        border-radius: 8px;
         border: 2px solid {TEXT_MUTED};
-        background-color: {BG_INPUT};
+        background-color: transparent;
     }}
 
     QRadioButton::indicator:checked {{
+        width: 8px;
+        height: 8px;
+        border-radius: 9px;
         border: 5px solid {ACCENT_PRIMARY};
         background-color: #FFFFFF;
     }}

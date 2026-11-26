@@ -422,14 +422,14 @@ class EffectCard(QFrame):
     def _apply_style(self):
         if self._selected:
             self.setStyleSheet(
-                f"QFrame#EffectCard {{ background-color: rgba(46, 107, 255, 0.14); "
+                f"QFrame#EffectCard {{ background-color: rgba(46, 107, 255, 0.12); "
                 f"border: 1px solid {ACCENT_PRIMARY}; border-radius: 12px; }}"
             )
         else:
             self.setStyleSheet(
-                f"QFrame#EffectCard {{ background-color: {BG_CARD_ELEVATED}; "
+                f"QFrame#EffectCard {{ background-color: transparent; "
                 f"border: 1px solid {BORDER_SUBTLE}; border-radius: 12px; }}"
-                f"QFrame#EffectCard:hover {{ border-color: #3B476B; background-color: #202740; }}"
+                f"QFrame#EffectCard:hover {{ border-color: #3B476B; background-color: rgba(255, 255, 255, 0.03); }}"
             )
 
     def mousePressEvent(self, event):
