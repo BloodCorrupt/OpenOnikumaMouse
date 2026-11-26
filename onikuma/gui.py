@@ -15,7 +15,7 @@ import threading
 import logging
 from typing import Optional, List
 
-from PySide6.QtCore import Qt, QObject, Signal, QTimer
+from PySide6.QtCore import Qt, QObject, Signal, QTimer, QSize
 from PySide6.QtGui import QIcon, QPixmap, QAction
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QFrame, QLabel, QPushButton,
@@ -32,10 +32,12 @@ from .protocol import (
 from .device import find_devices
 from .theme import (
     build_stylesheet, DPI_STAGE_COLORS,
-    TEXT_MAIN, TEXT_SECONDARY, TEXT_MUTED, SUCCESS, ERROR, BG_CARD_ELEVATED, BORDER_SUBTLE
+    TEXT_MAIN, TEXT_SECONDARY, TEXT_MUTED, SUCCESS, ERROR, ACCENT_GLOW,
+    BG_CARD_ELEVATED, BORDER_SUBTLE
 )
 from .widgets import (
-    MousePreviewWidget, BatteryBadgeWidget, EffectCard, ToastNotification
+    MousePreviewWidget, BatteryBadgeWidget, EffectCard, ToastNotification,
+    make_nav_icon
 )
 
 logger = logging.getLogger(__name__)
@@ -265,17 +267,24 @@ class OnikumaMainWindow(QMainWindow):
         self.nav_group.setExclusive(True)
 
         nav_items = [
-            ("⚡  DPI && Performance", 0),
-            ("🖱  Button Mapping", 1),
-            ("🌈  RGB Lighting", 2),
-            ("⚙  Device Info && Reset", 3),
+            ("dpi", "  DPI && Performance", 0),
+            ("buttons", "  Button Mapping", 1),
+            ("rgb", "  RGB Lighting", 2),
+            ("info", "  Device Info && Reset", 3),
         ]
 
-        for label, page_idx in nav_items:
+        for icon_kind, label, page_idx in nav_items:
             btn = QPushButton(label)
             btn.setProperty("navButton", True)
             btn.setCheckable(True)
             btn.setCursor(Qt.PointingHandCursor)
+            btn.setIconSize(QSize(18, 18))
+            idle_icon = make_nav_icon(icon_kind, TEXT_SECONDARY, 20)
+            active_icon = make_nav_icon(icon_kind, ACCENT_GLOW, 20)
+            btn.setIcon(active_icon if page_idx == 0 else idle_icon)
+            btn.toggled.connect(
+                lambda checked, b=btn, ai=active_icon, ii=idle_icon: b.setIcon(ai if checked else ii)
+            )
             if page_idx == 0:
                 btn.setChecked(True)
             btn.clicked.connect(lambda checked, idx=page_idx: self.pages.setCurrentIndex(idx))

@@ -15,7 +15,7 @@ from typing import Optional
 from PySide6.QtCore import Qt, QTimer, QRectF, QPointF, Signal, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import (
     QPainter, QColor, QPen, QBrush, QLinearGradient, QRadialGradient,
-    QPainterPath, QFont
+    QPainterPath, QFont, QPixmap, QIcon
 )
 from PySide6.QtWidgets import (
     QWidget, QFrame, QLabel, QHBoxLayout, QVBoxLayout, QGraphicsOpacityEffect
@@ -522,3 +522,57 @@ class ToastNotification(QFrame):
         if self._fading_out:
             self.setVisible(False)
             self._fading_out = False
+
+
+def make_nav_icon(kind: str, color: str = TEXT_SECONDARY, size: int = 20) -> QIcon:
+    """Create a crisp vector line-art QIcon drawn via QPainter."""
+    px = QPixmap(size, size)
+    px.fill(Qt.transparent)
+
+    painter = QPainter(px)
+    painter.setRenderHint(QPainter.Antialiasing)
+    pen = QPen(QColor(color), 1.7, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
+    painter.setPen(pen)
+    painter.setBrush(Qt.NoBrush)
+
+    s = size / 20.0
+
+    if kind == "dpi":
+        # Speedometer / sensor gauge line icon
+        painter.drawArc(QRectF(2.5 * s, 3.5 * s, 15 * s, 15 * s), 30 * 16, 120 * 16)
+        painter.drawArc(QRectF(2.5 * s, 3.5 * s, 15 * s, 15 * s), 180 * 16, 180 * 16)
+        # Needle
+        painter.drawLine(QPointF(10 * s, 12.5 * s), QPointF(14.5 * s, 7.5 * s))
+        painter.drawEllipse(QPointF(10 * s, 12.5 * s), 1.6 * s, 1.6 * s)
+        # Tick marks
+        painter.drawLine(QPointF(4.2 * s, 11 * s), QPointF(5.6 * s, 11 * s))
+        painter.drawLine(QPointF(10 * s, 4.5 * s), QPointF(10 * s, 6.0 * s))
+        painter.drawLine(QPointF(14.4 * s, 11 * s), QPointF(15.8 * s, 11 * s))
+
+    elif kind == "buttons":
+        # Top-down mouse line-art icon
+        painter.drawRoundedRect(QRectF(5 * s, 2.2 * s, 10 * s, 15.6 * s), 4.8 * s, 4.8 * s)
+        # Button divider & center seam
+        painter.drawLine(QPointF(5 * s, 8.2 * s), QPointF(15 * s, 8.2 * s))
+        painter.drawLine(QPointF(10 * s, 2.2 * s), QPointF(10 * s, 8.2 * s))
+        # Scroll wheel
+        painter.drawRoundedRect(QRectF(9 * s, 4.2 * s, 2 * s, 3 * s), 1 * s, 1 * s)
+
+    elif kind == "rgb":
+        # Spectrum / light rays line-art icon
+        center = QPointF(10 * s, 10 * s)
+        painter.drawEllipse(center, 3.3 * s, 3.3 * s)
+        for angle_deg in range(0, 360, 45):
+            rad = math.radians(angle_deg)
+            p1 = QPointF(10 * s + 5.5 * s * math.cos(rad), 10 * s + 5.5 * s * math.sin(rad))
+            p2 = QPointF(10 * s + 7.8 * s * math.cos(rad), 10 * s + 7.8 * s * math.sin(rad))
+            painter.drawLine(p1, p2)
+
+    elif kind == "info":
+        # Clean diagnostic / settings info circle line icon
+        painter.drawEllipse(QPointF(10 * s, 10 * s), 7.2 * s, 7.2 * s)
+        painter.drawLine(QPointF(10 * s, 9.2 * s), QPointF(10 * s, 14 * s))
+        painter.drawEllipse(QPointF(10 * s, 6.4 * s), 0.7 * s, 0.7 * s)
+
+    painter.end()
+    return QIcon(px)
