@@ -1,7 +1,4 @@
 hidapi
 rich
-customtkinter
-pillow
-pystray
+PySide6
 pyinstaller
-

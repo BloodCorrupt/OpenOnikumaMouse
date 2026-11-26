@@ -233,6 +233,15 @@ class OnikumaCW935:
         self.save_config(config)
         return config
 
+    def set_sleep_timer(self, minutes: int) -> MouseConfig:
+        """
+        Set auto-sleep timeout in minutes (0 = off, 1-30 minutes).
+        """
+        config = self.get_config()
+        config.sleep_time = max(0, min(30, int(minutes)))
+        self.save_config(config)
+        return config
+
     def set_scroll_direction(self, direction: int) -> MouseConfig:
         """
         Set mouse wheel scroll direction (0 = Forward / Normal, 1 = Reverse / Inverted).
