@@ -321,7 +321,11 @@ class OnikumaMainWindow(QMainWindow):
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setStyleSheet("QScrollArea { background-color: transparent; border: none; }")
+        scroll.viewport().setStyleSheet("background-color: transparent;")
         content = QWidget()
+        content.setObjectName("DpiScrollContent")
+        content.setStyleSheet("#DpiScrollContent { background-color: transparent; }")
         scroll.setWidget(content)
 
         outer = QVBoxLayout(page)
